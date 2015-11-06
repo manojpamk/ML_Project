@@ -8,14 +8,14 @@
 % 1) The url files need to be downloaded from www.image-net.org/
 % 2) Some URL links might get stuck. Manual intervention may be necessary.
 
-%Predefined
+
 myclasses = {'dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain','beach'};
 
 for class_index = 1:length(myclasses)
-    fileName = strcat('%s_urls',myclasses(class_index));   
+    fileName = sprintf('%s_urls',cell2mat(myclasses(class_index)));  
     fid = fopen(fileName);  
-    mkdir(myclasses(class_index));
-    cd myclasses(class_index);
+%     mkdir(cell2mat(myclasses(class_index)));
+    cd(cell2mat(myclasses(class_index)));
     tline = fgetl(fid);
     while ischar(tline)
         disp(tline)
@@ -26,10 +26,11 @@ for class_index = 1:length(myclasses)
             tline = fgetl(fid);
             continue;
         end
-        tline = strrep(tline,'/','_');  % Otherwise, treated as direcotry during imwrite
+        tline = strrep(tline,'/','_');
+%         error('stop');
 
         try
-            imwrite(myImage,strcat('%s',tline),myclasses(class_index));    
+            imwrite(myImage,sprintf('%s_%s',cell2mat(myclasses(class_index)),tline));    
         catch writeError
             disp('Error during writing. Skipping...');
             tline = fgetl(fid);
