@@ -8,7 +8,7 @@
 % 1) The url files need to be downloaded from www.image-net.org/
 % 2) Some URL links might get stuck. Manual intervention may be necessary.
 
-
+%Predefined
 myclasses = {'dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain','beach'};
 
 for class_index = 1:length(myclasses)
@@ -26,7 +26,7 @@ for class_index = 1:length(myclasses)
             tline = fgetl(fid);
             continue;
         end
-        tline = strrep(tline,'/','_');
+        tline = strrep(tline,'/','_');  % Otherwise, treated as direcotry during imwrite
 
         try
             imwrite(myImage,strcat('%s',tline),myclasses(class_index));    
