@@ -12,7 +12,7 @@ clear all;
 close all;
 
 myclasses = {'dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain','beach'};
-% myclasses = {'dogs'};
+num_egs = zeros(1,length(myclasses));
 
 for classIndex = 1:length(myclasses)
     
@@ -22,6 +22,7 @@ for classIndex = 1:length(myclasses)
     
     for fileIndex = 1:length(fileName)
         myImage = imread(fileName(fileIndex).name);
+        num_egs(classIndex) = num_egs(classIndex) + 1;
         eval(sprintf('class_%s(%d,:,:,:) = myImage;',cell2mat(myclasses(classIndex)),fileIndex));
         fprintf('Added image <%s> %d/%d..\n',cell2mat(myclasses(classIndex)),fileIndex,length(fileName));
     end
@@ -29,7 +30,15 @@ for classIndex = 1:length(myclasses)
     cd ../..
 end
 
-clear classIndex myImage fileIndex fileName;
+% Choose only min(num_egs) number of examples from each class so as to
+% maintain uniformity
+
+N = min(num_egs);
+for classIndex = 1:length(myclasses)
+    eval(sprintf('class_%s = datasample(class_%s,N,''Replace'',false);',cell2mat(myclasses(classIndex)),cell2mat(myclasses(classIndex))));
+end
+
+clear classIndex myImage fileIndex fileName N num_egs;
 cd matlabData/
 fprintf('Saving into rawData.mat...\n');
 save('rawData.mat');

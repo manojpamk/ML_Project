@@ -1,6 +1,8 @@
 % EE 660 Project
 % Manoj Kumar P.A  (manojpamk@gmail.com)
 
+% Execution path : ~/Acads/Fall2015/EE660/ProjectStuff/image_urls
+
 % Reads the list of urls from <classname>_urls, and collects images from
 % them, storing in respective folders. 
 
@@ -12,7 +14,7 @@
 myclasses = {'dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain','beach'};
 
 for class_index = 1:length(myclasses)
-    fileName = sprintf('%s_urls',cell2mat(myclasses(class_index)));  
+    fileName = sprintf('%s2_urls',cell2mat(myclasses(class_index)));   % Next is flowers2
     fid = fopen(fileName);  
 %     mkdir(cell2mat(myclasses(class_index)));
     cd(cell2mat(myclasses(class_index)));
