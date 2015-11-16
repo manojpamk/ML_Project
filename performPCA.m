@@ -99,7 +99,15 @@ superVector = superVector - repmat(m,[size(superVector,1) 1]);
 superVector = superVector./sqrt(repmat(v,[size(superVector,1) 1]));
 
 save('matlabData/afterDimReduction.mat');
+superVector = [superVector labels];
 
+% Creating a bag-of-words representation for the labels
+a = eye(10); bag_of_words_labels = zeros(size(superVector,1),length(myclasses));
+for classIndex = 1:length(myclasses)
+    bag_of_words_labels(824*(classIndex-1)+1:824*(classIndex),:) = repmat(a(classIndex,:),[824 1]);
+end
+clear a classIndex;
+arffwrite('matlabData/afterDimReduction',superVector);
 
 %==========================================================================
 
