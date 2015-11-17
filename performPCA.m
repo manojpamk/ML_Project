@@ -5,16 +5,16 @@
 % NAIVE Method for now : Convert DxDx3 image into 1x3D^2 row vector
 
 
-skipSuperVectorCreation = 1;
+skipSuperVectorCreation = 0;
 if (skipSuperVectorCreation ~= 1)
     clc;
     % clear all;
     close all;
     fprintf('Loading data...');
-    load matlabData/rawData.mat;
+    load matlabData/rawData_filtered.mat;
     fprintf('Done\n');
 
-    myclasses = {'dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain','beach'};
+    myclasses = {'dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain','flowers'};
 
     %==========================================================================
     % First, vectorize and normalize
@@ -43,7 +43,9 @@ if (skipSuperVectorCreation ~= 1)
     superVector(:,1:end-1) = superVector(:,1:end-1) - repmat(m,[size(superVector,1) 1]);
     % superVector(:,1:end-1) = superVector(:,1:end-1)./sqrt(repmat(v,[size(superVector,1) 1]));
 
-    clear m v;
+    clear m v temp classVar myImage;
+    fprintf('Saving into superVector_filtered.mat...\n');
+    save('matlabData/superVector_filtered.mat');
     %==========================================================================
 end
 fprintf('Completed superVector preparation. Commencing PCA... \n');
@@ -65,6 +67,9 @@ if (skipPCA ~= 1)
 
     fprintf('Creating covariance matrix...\n');
     Q = X'*X; clear X;    % Takes 5-10 min
+    save('matlabData/afterCovComputation.mat','-v7.3');
+    
+    % This is THE MOST resource-consuming step. Please be wary about it!    
     fprintf('Computing the eigen vectors and eigen values...\n');
     [e,l] = eig(Q); clear Q;
 

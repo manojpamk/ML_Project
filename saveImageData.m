@@ -7,11 +7,14 @@
 % processing must begin.
 % Data is stored in matlabData/
 
+% EDITS : 
+% 1. Added Gaussian smoothening - attempting to remove noise from image
+
 clc;
 clear all;
 close all;
 
-myclasses = {'dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain','beach'};
+myclasses = {'flowers','dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain'};
 num_egs = zeros(1,length(myclasses));
 
 for classIndex = 1:length(myclasses)
@@ -22,6 +25,11 @@ for classIndex = 1:length(myclasses)
     
     for fileIndex = 1:length(fileName)
         myImage = imread(fileName(fileIndex).name);
+        
+        % Pre-processing takes place here
+        % Gaussian smoothening. Parameters set by observing examples        
+%         myImage = uint8(imfilter(double(myImage),fspecial('gaussian',3,2),'replicate'));        
+        
         num_egs(classIndex) = num_egs(classIndex) + 1;
         eval(sprintf('class_%s(%d,:,:,:) = myImage;',cell2mat(myclasses(classIndex)),fileIndex));
         fprintf('Added image <%s> %d/%d..\n',cell2mat(myclasses(classIndex)),fileIndex,length(fileName));
