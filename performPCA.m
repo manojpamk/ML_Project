@@ -13,12 +13,12 @@ if (skipSuperVectorCreation ~= 1)
     clc;
     % clear all;
     close all;
-    numChannels = 1;        % Change to 1 for grayscale
     fprintf('Loading data...');
-%     load matlabData/Rawdata/rawData_rgb_normal.mat;
+    load matlabData/Rawdata/rawData_rgb_smooth.mat;
 %     load matlabData/Rawdata/rawData_grayscale_normal.mat;
-    load matlabData/Rawdata/rawData_grayscale_smooth.mat;
+%     load matlabData/Rawdata/rawData_grayscale_smooth.mat;
     
+    numChannels = 3;        % Change to 1 for grayscale
     fprintf('Done\n');
 
     myclasses = {'flowers','dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain'};
@@ -52,7 +52,7 @@ if (skipSuperVectorCreation ~= 1)
 
     clear m v temp classVar myImage class_*;
     fprintf('Saving into superVector_grayscale.mat...\n');    
-    save('matlabData/Supervectors/superVector_grayscale_smooth.mat');
+    save('matlabData/Supervectors/superVector_rgb_smooth.mat');
     %==========================================================================
 end
 fprintf('Completed superVector preparation. Commencing PCA... \n');
@@ -68,13 +68,14 @@ if (skipPCA ~= 1)
     % Best to execute as a standalone code, and hence skipping over by default.
 
     % Q is 5.8G for 8240x30,000 
+    load('matlabData/Supervectors/superVector_rgb_smooth.mat');
 
     X = superVector(:,1:end-1); labels = superVector(:,end);
     clear superVector;
 
     fprintf('Creating covariance matrix...\n');
     Q = X'*X; clear X;    % Takes 5-10 min
-    save('matlabData/AfterCovComputation/afterCovComputation_grayscale_smooth.mat','-v7.3');
+      
     
     % This is THE MOST resource-consuming step. Please be wary about it!    
     fprintf('Computing the eigen vectors and eigen values...\n');
@@ -93,15 +94,15 @@ end
 % c = cumsum(l)./sum(l);
 % min(find(c>0.99)), etc..
 
-% Grayscale, Smoothening
+% Grayscale, Smoothening (max 10000)
 % Relative Strength (%)     First n values
 % 97*                        443
 % 99                         878
 % 99.9                       2018
 % 99.99                      3617
 % 99.999                     5412
-
-% Grayscale, Smoothening
+ 
+% Grayscale, Normal (max 10000)
 % Relative Strength (%)     First n values
 % 92*                        531   
 % 99                         2824
@@ -109,8 +110,23 @@ end
 % 99.99                      6863
 % 99.999                     7727
 
+% RGB, Smoothening (max 30000)
+% Relative Strength (%)     First n values
+% 96*                       467
+% 99                        1208
+% 99.9                      2858
+% 99.99                     4837
 
-m = 443;  % The reduced dimension
+% RGB, Normal (max 30000)
+% Relative Strength (%)     First n values
+% 91*                       511
+% 99                        3114
+% 99.9                      5755
+% 99.99                     7347
+
+
+
+m = 511;  % The reduced dimension
 l = l(1:m);
 load('matlabData/afterEigAnalysis.mat','e');     % This will take some time
 e = e(:,end-m+1:end); e = fliplr(e);            % Since e-vectors are ascending by default
@@ -137,9 +153,9 @@ for classIndex = 1:length(myclasses)
 end
 clear a classIndex;
 
-save('matlabData/AfterDimReduction/afterDimReduction_grayscale_smooth_97_443.mat');
+save('matlabData/AfterDimReduction/afterDimReduction_rgb_normal_91_511.mat');
 superVector = [superVector labels];
-arffwrite('matlabData/ArffFiles/afterDimReduction_grayscale_smooth_97_443',superVector);
+arffwrite('matlabData/ArffFiles/afterDimReduction_rgb_normal_91_511',superVector);
 
 %==========================================================================
 

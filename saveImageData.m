@@ -27,11 +27,11 @@ for classIndex = 1:length(myclasses)
         myImage = imread(fileName(fileIndex).name);
         
         % Pre-processing takes place here
-        error('Stop and check!');
+%         error('Stop and check!');
         % 1. Gaussian smoothening. Parameters set by observing examples        
-        myImage = uint8(imfilter(double(myImage),fspecial('gaussian',3,2),'replicate'));        
+%         myImage = uint8(imfilter(double(myImage),fspecial('gaussian',3,2),'replicate'));        
         
-        % 2. Conversion to grayscale
+%         2. Conversion to grayscale
 %         myImage = rgb2gray(myImage);
         
         num_egs(classIndex) = num_egs(classIndex) + 1;
@@ -53,6 +53,6 @@ end
 clear classIndex myImage fileIndex fileName N num_egs;
 cd matlabData/Rawdata/
 fprintf('Saving into rawData.mat...\n');
-save('rawData_rgb_smooth.mat');
+save('rawData_rgb_normal.mat');
 fprintf('Done.\n');
 cd ../..

@@ -13,7 +13,7 @@ clear all;
 close all;
 myclasses = {'flowers','dogs','houses','aeroplane','ship','car','motorcycle','bus','beach','mountain'};
 
-load('matlabData/AfterDimReduction/afterDimReduction_grayscale_smooth_97_443.mat');
+load('matlabData/AfterDimReduction/afterDimReduction_rgb_normal_91_511.mat');
 
 weights = sbmlr(superVector,bag_of_words_labels);   % Takes ~30min for grayscale
 
@@ -25,6 +25,6 @@ weights = sbmlr(superVector,bag_of_words_labels);   % Takes ~30min for grayscale
 top50indices = sort(sortIndex(1:50));  % To the top 50 indices in ascending
 superVector = superVector(:,top50indices);
 
-save('matlabData/AfterL1/afterL1_grayscale_smooth_97_443.mat','superVector','labels','bag_of_words_labels','myclasses','-v7.3');
+save('matlabData/AfterL1/afterL1_rgb_normal_91_511.mat','superVector','labels','bag_of_words_labels','myclasses','-v7.3');
 superVector = [superVector labels];
-arffwrite('matlabData/ArffFiles/afterL1_grayscale_smooth_97_443',superVector);
+arffwrite('matlabData/ArffFiles/afterL1_rgb_normal_91_511',superVector);
